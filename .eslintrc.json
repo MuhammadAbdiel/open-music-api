@@ -11,5 +11,19 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "rules": {}
+    "rules": {
+        "no-console": "off",
+        "quotes": "off",
+        "no-unused-vars": "off",
+        "linebreak-style": "off",
+        "no-underscore-dangle": "off",
+        "class-methods-use-this": "off",
+        "import/no-extraneous-dependencies": "off",
+        "arrow-parens": "off",
+        "camelcase": "off",
+        "object-curly-newline": "off",
+        "comma-dangle": "off",
+        "quote-props": "off",
+        "operator-linebreak": "off"
+    }
 }
