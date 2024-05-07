@@ -24,6 +24,7 @@
         "object-curly-newline": "off",
         "comma-dangle": "off",
         "quote-props": "off",
-        "operator-linebreak": "off"
+        "operator-linebreak": "off",
+        "implicit-arrow-linebreak": "off"
     }
 }
