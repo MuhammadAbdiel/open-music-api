@@ -8,6 +8,24 @@ class PlaylistHandler {
     autoBind(this);
   }
 
+  async getActivitiesByPlaylistIdHandler(request, h) {
+    const { id: playlistId } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._service.verifyPlaylistAccess(playlistId, credentialId);
+
+    const activities = await this._service.getActivitiesByPlaylistId(
+      playlistId
+    );
+
+    return h
+      .response({
+        status: "success",
+        data: activities,
+      })
+      .code(200);
+  }
+
   async postPlaylistHandler(request, h) {
     this._validator.validatePlaylistPayload(request.payload);
 
@@ -63,7 +81,8 @@ class PlaylistHandler {
     await this._service.verifyPlaylistAccess(playlistId, credentialId);
     const playlistSongId = await this._service.addPlaylistSong(
       playlistId,
-      songId
+      songId,
+      credentialId
     );
 
     return h
@@ -100,7 +119,11 @@ class PlaylistHandler {
     const { id: playlistId } = request.params;
 
     await this._service.verifyPlaylistAccess(playlistId, credentialId);
-    await this._service.deletePlaylistSongById(songId);
+    await this._service.deletePlaylistSongById(
+      songId,
+      playlistId,
+      credentialId
+    );
 
     return {
       status: "success",
