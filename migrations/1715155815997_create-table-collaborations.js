@@ -3,21 +3,21 @@
 exports.shorthands = undefined;
 
 exports.up = (pgm) => {
-  pgm.createTable("playlist_songs", {
+  pgm.createTable("collaborations", {
     id: {
       type: "VARCHAR(50)",
       primaryKey: true,
     },
     "playlistId": {
       type: "VARCHAR(50)",
-      notNull: false,
+      notNull: true,
       references: '"playlists"',
       onDelete: "CASCADE",
     },
-    "songId": {
+    "userId": {
       type: "VARCHAR(50)",
       notNull: true,
-      references: '"songs"',
+      references: '"users"',
       onDelete: "CASCADE",
     },
     created_at: {
@@ -34,24 +34,24 @@ exports.up = (pgm) => {
 
   // Via Query SQL
   // pgm.addConstraint(
-  //   "playlist_songs",
-  //   "unique_playlist_id_and_song_id",
-  //   "UNIQUE(playlist_id, song_id)"
+  //   "collaborations",
+  //   "unique_playlist_id_and_user_id",
+  //   "UNIQUE(playlist_id, user_id)"
   // );
 
   // pgm.addConstraint(
-  //   "playlist_songs",
-  //   "fk_playlist_songs.playlist_id_playlists.id",
+  //   "collaborations",
+  //   "fk_collaborations.playlist_id_playlists.id",
   //   "FOREIGN KEY(playlist_id) REFERENCES playlists(id) ON DELETE CASCADE"
   // );
 
   // pgm.addConstraint(
-  //   "playlist_songs",
-  //   "fk_playlist_songs.song_id_songs.id",
-  //   "FOREIGN KEY(song_id) REFERENCES songs(id) ON DELETE CASCADE"
+  //   "collaborations",
+  //   "fk_collaborations.user_id_users.id",
+  //   "FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE"
   // );
 };
 
 exports.down = (pgm) => {
-  pgm.dropTable("playlist_songs");
+  pgm.dropTable("collaborations");
 };
