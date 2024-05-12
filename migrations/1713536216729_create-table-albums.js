@@ -16,6 +16,11 @@ exports.up = (pgm) => {
       type: "INT",
       notNull: true,
     },
+    "coverUrl": {
+      type: "TEXT",
+      notNull: false,
+      default: null,
+    },
     created_at: {
       type: "TIMESTAMP",
       notNull: true,
