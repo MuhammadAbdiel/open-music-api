@@ -102,6 +102,47 @@ class AlbumHandler {
       })
       .code(201);
   }
+
+  async postLikesAlbumHandler(request, h) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._albumsService.likeAlbum(id, credentialId);
+
+    return h
+      .response({
+        status: "success",
+        message: "Menyukai album",
+      })
+      .code(201);
+  }
+
+  async deleteLikesAlbumHandler(request) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._albumsService.unlikeAlbum(id, credentialId);
+
+    return {
+      status: "success",
+      message: "Batal menyukai album",
+    };
+  }
+
+  async getLikesAlbumHandler(request, h) {
+    const { id } = request.params;
+    const { likes, source } = await this._albumsService.getLikesByAlbumId(id);
+
+    const response = h.response({
+      status: "success",
+      data: {
+        likes,
+      },
+    });
+
+    response.header("X-Data-Source", source);
+    return response;
+  }
 }
 
 module.exports = AlbumHandler;
