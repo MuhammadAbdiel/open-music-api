@@ -1,3 +1,5 @@
+const Joi = require("joi");
+
 const routes = (handler) => [
   {
     method: "POST",
@@ -5,6 +7,22 @@ const routes = (handler) => [
     handler: handler.postPlaylistHandler,
     options: {
       auth: "musicapi_jwt",
+      description: "Create a new playlist",
+      tags: ["api", "playlists"],
+      validate: {
+        payload: Joi.object({
+          name: Joi.string().required(),
+          owner: Joi.string().optional(),
+        }).label("CreatePlaylistPayload"),
+      },
+      response: {
+        schema: Joi.object({
+          status: Joi.string().valid("success").required(),
+          data: Joi.object({
+            playlistId: Joi.string().required(),
+          }).label("CreatePlaylistResponse"),
+        }),
+      },
     },
   },
   {
@@ -13,6 +31,24 @@ const routes = (handler) => [
     handler: handler.getPlaylistsHandler,
     options: {
       auth: "musicapi_jwt",
+      description: "Get all playlists",
+      tags: ["api", "playlists"],
+      response: {
+        schema: Joi.object({
+          status: Joi.string().valid("success").required(),
+          data: Joi.object({
+            playlists: Joi.array()
+              .items(
+                Joi.object({
+                  id: Joi.string().required(),
+                  name: Joi.string().required(),
+                  owner: Joi.string().optional(),
+                }).label("Playlist")
+              )
+              .required(),
+          }).label("GetPlaylistsResponse"),
+        }),
+      },
     },
   },
   {
@@ -21,6 +57,18 @@ const routes = (handler) => [
     handler: handler.deletePlaylistByIdHandler,
     options: {
       auth: "musicapi_jwt",
+      description: "Delete a playlist by ID",
+      tags: ["api", "playlists"],
+      validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }).label("DeletePlaylistParams"),
+      },
+      response: {
+        schema: Joi.object({
+          status: Joi.string().valid("success").required(),
+        }),
+      },
     },
   },
   {
@@ -29,6 +77,25 @@ const routes = (handler) => [
     handler: handler.postPlaylistSongHandler,
     options: {
       auth: "musicapi_jwt",
+      description: "Add a song to a playlist",
+      tags: ["api", "playlists"],
+      validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }).label("PlaylistIdParams"),
+        payload: Joi.object({
+          songId: Joi.string().required(),
+        }).label("AddSongToPlaylistPayload"),
+      },
+      response: {
+        schema: Joi.object({
+          status: Joi.string().valid("success").required(),
+          data: Joi.object({
+            playlistId: Joi.string().required(),
+            songId: Joi.string().required(),
+          }).label("AddSongToPlaylistResponse"),
+        }),
+      },
     },
   },
   {
@@ -37,6 +104,29 @@ const routes = (handler) => [
     handler: handler.getPlaylistSongsHandler,
     options: {
       auth: "musicapi_jwt",
+      description: "Get all songs in a playlist",
+      tags: ["api", "playlists"],
+      validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }).label("PlaylistIdParams"),
+      },
+      response: {
+        schema: Joi.object({
+          status: Joi.string().valid("success").required(),
+          data: Joi.object({
+            songs: Joi.array()
+              .items(
+                Joi.object({
+                  id: Joi.string().required(),
+                  title: Joi.string().required(),
+                  performer: Joi.string().required(),
+                }).label("SongInPlaylist")
+              )
+              .required(),
+          }).label("GetPlaylistSongsResponse"),
+        }),
+      },
     },
   },
   {
@@ -45,6 +135,21 @@ const routes = (handler) => [
     handler: handler.deletePlaylistSongByIdHandler,
     options: {
       auth: "musicapi_jwt",
+      description: "Remove a song from a playlist",
+      tags: ["api", "playlists"],
+      validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }).label("PlaylistIdParams"),
+        payload: Joi.object({
+          songId: Joi.string().required(),
+        }).label("RemoveSongFromPlaylistPayload"),
+      },
+      response: {
+        schema: Joi.object({
+          status: Joi.string().valid("success").required(),
+        }),
+      },
     },
   },
   {
@@ -53,6 +158,32 @@ const routes = (handler) => [
     handler: handler.getActivitiesByPlaylistIdHandler,
     options: {
       auth: "musicapi_jwt",
+      description: "Get activities related to a playlist",
+      tags: ["api", "playlists"],
+      validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }).label("PlaylistIdParams"),
+      },
+      response: {
+        schema: Joi.object({
+          status: Joi.string().valid("success").required(),
+          data: Joi.object({
+            activities: Joi.array()
+              .items(
+                Joi.object({
+                  id: Joi.string().required(),
+                  playlistId: Joi.string().required(),
+                  songId: Joi.string().required(),
+                  userId: Joi.string().required(),
+                  action: Joi.string().required(),
+                  time: Joi.string().required(),
+                }).label("Activity")
+              )
+              .required(),
+          }).label("GetActivitiesResponse"),
+        }),
+      },
     },
   },
 ];

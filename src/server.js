@@ -1,8 +1,10 @@
 require("dotenv").config();
 
 const Hapi = require("@hapi/hapi");
+const HapiSwagger = require("hapi-swagger");
 const Jwt = require("@hapi/jwt");
 const Inert = require("@hapi/inert");
+const Vision = require("@hapi/vision");
 const path = require("path");
 
 // Albums
@@ -72,6 +74,13 @@ const init = async () => {
   );
   // const storageService = new StorageService();
 
+  const swaggerOptions = {
+    info: {
+      title: "Open Music API Documentation",
+      version: "1.0.0",
+    },
+  };
+
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -88,6 +97,13 @@ const init = async () => {
     },
     {
       plugin: Inert,
+    },
+    {
+      plugin: Vision,
+    },
+    {
+      plugin: HapiSwagger,
+      options: swaggerOptions,
     },
   ]);
 
