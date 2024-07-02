@@ -88,7 +88,7 @@ Untuk pengujian _upload files_ perlu dilakukan secara manual (tidak bisa secara 
 Jika ingin menghapus seluruh data yang ada pada tabel database, gunakan perintah berikut ini pada `psql`:
 
 ```sql
-TRUNCATE users, authentications, songs, playlists, playlistsongs, collaborations;
+TRUNCATE users, authentications, songs, playlists, playlist_songs, collaborations;
 ```
 
 ## Hak Cipta dan Lisensi
